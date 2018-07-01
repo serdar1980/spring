@@ -1,0 +1,29 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+
+group 'ru.serdar1980'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+
+}
+
+jar {
+    baseName = 'otusQuiz'
+    version =  '0.1.0'
+}
+ext {
+    springVersion ='5.0.7.RELEASE'
+}
+
+dependencies {
+    //compile group: 'org.springframework', name: 'spring-context', version: '5.0.7.RELEASE'
+    //compile group: 'org.springframework', name: 'spring-core', version: '5.0.7.RELEASE'
+    compile "org.springframework:spring-context:${springVersion}"
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
