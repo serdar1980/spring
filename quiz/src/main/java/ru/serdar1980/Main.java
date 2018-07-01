@@ -11,6 +11,7 @@ import ru.serdar1980.service.MessageLocateService;
 import ru.serdar1980.service.RandomQuestionGeneratorService;
 
 import java.util.Collections;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -66,12 +67,22 @@ public class Main {
 
     private static void checkAnswer(List<Answer> answers, Student student) {
         Scanner scanner = new Scanner(System.in);
-        Integer res = scanner.nextInt();
-        if (res > answers.size() || res < 0) {
-            System.out.println(MessageLocateService.getMessage("lable.anwer"));
+        Integer res = -1;
+        try {
+            res = scanner.nextInt();
+            if (res > answers.size() || res < 0) {
+                System.out.println(MessageLocateService.getMessage("lable.anwer"));
+                scanner = null;
+                checkAnswer(answers, student);
+                return;
+            }
+        } catch (InputMismatchException ex) {
             scanner = null;
+            System.out.println(MessageLocateService.getMessage("lable.anwer"));
             checkAnswer(answers, student);
+            return;
         }
+
         Answer answer = answers.get(res - 1);
         if (answer.isTrue()) {
             student.increment();

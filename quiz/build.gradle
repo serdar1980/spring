@@ -17,9 +17,13 @@ jar {
     baseName = 'otusQuiz'
     version =  '0.1.0'
 }
+ext {
+    springVersion ='5.0.7.RELEASE'
+}
 
 dependencies {
-    compile group: 'org.springframework', name: 'spring-context', version: '5.0.7.RELEASE'
-    compile group: 'org.springframework', name: 'spring-core', version: '5.0.7.RELEASE'
+    //compile group: 'org.springframework', name: 'spring-context', version: '5.0.7.RELEASE'
+    //compile group: 'org.springframework', name: 'spring-core', version: '5.0.7.RELEASE'
+    compile "org.springframework:spring-context:${springVersion}"
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }

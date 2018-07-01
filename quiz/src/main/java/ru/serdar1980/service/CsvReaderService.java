@@ -8,7 +8,9 @@ import ru.serdar1980.domain.Question;
 import ru.serdar1980.domain.Quiz;
 
 import javax.annotation.PostConstruct;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,13 +18,13 @@ import java.util.List;
 public class CsvReaderService {
 
     private static final Integer MAX_CVS_ABSWER_DEF = 2;
+    private static final String SPLIT_BY = ";";
     @Value("${quiz.csv.splitby}")
-    private String cvsSplitBy = ";";
+    private String cvsSplitBy;
     @Value("${quiz.csv.max.answer}")
     private Integer maxCvsAnswer;
     private Quiz quiz;
 
-    //@Value("${quiz.csv.filename}")
     private String csvFilename = "quiz.csv";
 
     @Autowired
@@ -35,6 +37,9 @@ public class CsvReaderService {
         if (maxCvsAnswer == null) {
             maxCvsAnswer = MAX_CVS_ABSWER_DEF;
         }
+        if (cvsSplitBy == null) {
+            cvsSplitBy = SPLIT_BY;
+        }
         List<Question> questions = new ArrayList<>();
         if (csvFilename != null) {
             ClassLoader classLoader = getClass().getClassLoader();
@@ -46,18 +51,13 @@ public class CsvReaderService {
                     Question question = null;
                     // use comma as separator
                     String[] metadata = line.split(cvsSplitBy);
+                    maxCvsAnswer = metadata.length;
                     if (metadata.length == maxCvsAnswer) {
                         List<Answer> answers = new ArrayList<>();
                         question = new Question(metadata[0]);
                         boolean flag = Boolean.TRUE;
                         for (int j = 1; j < maxCvsAnswer; j++) {
-                            String strAnswer = "";
-                            try {
-                                strAnswer = metadata[j];
-                            } catch (IndexOutOfBoundsException ex) {
-                                break;
-                            }
-                            Answer answer = new Answer(strAnswer, flag);
+                            Answer answer = new Answer(metadata[j], flag);
                             answers.add(answer);
                             flag = Boolean.FALSE;
                         }
@@ -67,11 +67,6 @@ public class CsvReaderService {
                         questions.add(question);
                     }
                 }
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

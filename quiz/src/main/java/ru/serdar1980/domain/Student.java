@@ -9,9 +9,9 @@ import java.util.List;
 @Component
 @Scope("prototype")
 public class Student {
-    String name;
-    List<Question> questions;
-    Integer result = 0;
+    private String name;
+    private List<Question> questions;
+    private Integer result = 0;
 
     public Student(String name) {
         this.name = name;

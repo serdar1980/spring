@@ -7,7 +7,7 @@ import java.util.List;
 
 @Component
 public class Quiz {
-    List<Question> questions = new ArrayList<>();
+    private List<Question> questions = new ArrayList<>();
 
     public List<Question> getQuestions() {
         return new ArrayList<Question>(questions);
