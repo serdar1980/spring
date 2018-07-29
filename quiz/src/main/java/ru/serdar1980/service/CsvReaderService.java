@@ -1,8 +1,9 @@
 package ru.serdar1980.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ru.serdar1980.condig.Csv;
+import ru.serdar1980.condig.MaxValue;
 import ru.serdar1980.domain.Answer;
 import ru.serdar1980.domain.Question;
 import ru.serdar1980.domain.Quiz;
@@ -17,14 +18,13 @@ import java.util.List;
 @Service
 public class CsvReaderService {
 
+    private Csv csv;
+    private MaxValue maxValue;
     private static final Integer MAX_CVS_ABSWER_DEF = 2;
     private static final String SPLIT_BY = ";";
-    @Value("${quiz.csv.splitby}")
-    private String cvsSplitBy;
-    @Value("${quiz.csv.max.answer}")
-    private Integer maxCvsAnswer;
     private Quiz quiz;
-
+    private Integer maxCvsAnswer;
+    private String cvsSplitBy;
     private String csvFilename = "quiz.csv";
 
     @Autowired
@@ -32,13 +32,27 @@ public class CsvReaderService {
         this.quiz = quiz;
     }
 
+    @Autowired
+    public void setCsv(Csv csv) {
+        this.csv = csv;
+    }
+
+    @Autowired
+    public void setMaxValue(MaxValue maxValue) {
+        this.maxValue = maxValue;
+    }
+
     @PostConstruct
     public void readFile() {
-        if (maxCvsAnswer == null) {
+        if (maxValue.getAnswer() == null) {
             maxCvsAnswer = MAX_CVS_ABSWER_DEF;
+        } else {
+            maxCvsAnswer = maxValue.getAnswer();
         }
-        if (cvsSplitBy == null) {
+        if (csv.getCvsSplitBy() == null) {
             cvsSplitBy = SPLIT_BY;
+        } else {
+            cvsSplitBy = csv.getCvsSplitBy();
         }
         List<Question> questions = new ArrayList<>();
         if (csvFilename != null) {
