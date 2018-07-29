@@ -5,3 +5,7 @@ quiz:
   max:
     questions: 2
     answer: 3
+
+spring:
+  banner:
+    location: classpath:bannername.txt
