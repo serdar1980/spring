@@ -1,26 +1,14 @@
 package ru.serdar1980;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import ru.serdar1980.domain.Answer;
-import ru.serdar1980.domain.Question;
-import ru.serdar1980.domain.Student;
-import ru.serdar1980.service.CsvReaderService;
-import ru.serdar1980.service.MessageLocateService;
-import ru.serdar1980.service.RandomQuestionGeneratorService;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.Collections;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
-
-@Configuration
-@ComponentScan
+@SpringBootApplication
 public class Main {
 
     public static void main(String... args) {
-
+        SpringApplication.run(Main.class);
+/*
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Main.class);
         CsvReaderService csvReaderService = context.getBean(CsvReaderService.class);
 
@@ -29,7 +17,7 @@ public class Main {
 
         String studentName = scanner.next();
 
-        Student student = new Student(studentName);
+
 
         RandomQuestionGeneratorService genRandomQuiz =
                 context.getBean(RandomQuestionGeneratorService.class);
@@ -87,5 +75,7 @@ public class Main {
         if (answer.isTrue()) {
             student.increment();
         }
+        */
     }
+
 }
