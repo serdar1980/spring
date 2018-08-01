@@ -15,10 +15,6 @@ public class Question {
         return question;
     }
 
-    public void setQuestion(String question) {
-        this.question = question;
-    }
-
     public List<Answer> getAnswers() {
         return new ArrayList<Answer>(answers);
     }

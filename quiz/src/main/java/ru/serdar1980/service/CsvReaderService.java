@@ -1,28 +1,30 @@
 package ru.serdar1980.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ru.serdar1980.condig.Csv;
+import ru.serdar1980.condig.MaxValue;
 import ru.serdar1980.domain.Answer;
 import ru.serdar1980.domain.Question;
 import ru.serdar1980.domain.Quiz;
 
 import javax.annotation.PostConstruct;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class CsvReaderService {
 
+    private Csv csv;
+    private MaxValue maxValue;
     private static final Integer MAX_CVS_ABSWER_DEF = 2;
-    @Value("${quiz.csv.splitby}")
-    private String cvsSplitBy = ";";
-    @Value("${quiz.csv.max.answer}")
-    private Integer maxCvsAnswer;
+    private static final String SPLIT_BY = ";";
     private Quiz quiz;
-
-    //@Value("${quiz.csv.filename}")
+    private Integer maxCvsAnswer;
+    private String cvsSplitBy;
     private String csvFilename = "quiz.csv";
 
     @Autowired
@@ -30,10 +32,27 @@ public class CsvReaderService {
         this.quiz = quiz;
     }
 
+    @Autowired
+    public void setCsv(Csv csv) {
+        this.csv = csv;
+    }
+
+    @Autowired
+    public void setMaxValue(MaxValue maxValue) {
+        this.maxValue = maxValue;
+    }
+
     @PostConstruct
     public void readFile() {
-        if (maxCvsAnswer == null) {
+        if (maxValue.getAnswer() == null) {
             maxCvsAnswer = MAX_CVS_ABSWER_DEF;
+        } else {
+            maxCvsAnswer = maxValue.getAnswer();
+        }
+        if (csv.getCvsSplitBy() == null) {
+            cvsSplitBy = SPLIT_BY;
+        } else {
+            cvsSplitBy = csv.getCvsSplitBy();
         }
         List<Question> questions = new ArrayList<>();
         if (csvFilename != null) {
@@ -46,18 +65,13 @@ public class CsvReaderService {
                     Question question = null;
                     // use comma as separator
                     String[] metadata = line.split(cvsSplitBy);
+                    maxCvsAnswer = metadata.length;
                     if (metadata.length == maxCvsAnswer) {
                         List<Answer> answers = new ArrayList<>();
                         question = new Question(metadata[0]);
                         boolean flag = Boolean.TRUE;
                         for (int j = 1; j < maxCvsAnswer; j++) {
-                            String strAnswer = "";
-                            try {
-                                strAnswer = metadata[j];
-                            } catch (IndexOutOfBoundsException ex) {
-                                break;
-                            }
-                            Answer answer = new Answer(strAnswer, flag);
+                            Answer answer = new Answer(metadata[j], flag);
                             answers.add(answer);
                             flag = Boolean.FALSE;
                         }
@@ -67,11 +81,6 @@ public class CsvReaderService {
                         questions.add(question);
                     }
                 }
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
