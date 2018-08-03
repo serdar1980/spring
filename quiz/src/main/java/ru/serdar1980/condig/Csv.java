@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.validation.constraints.NotNull;
 
-@Configuration
+
 @EnableConfigurationProperties
 @ConfigurationProperties("quiz.csv")
 public class Csv {
