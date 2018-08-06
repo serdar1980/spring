@@ -11,11 +11,11 @@ insert into tbl_author (id, fio) values (4, 'Ричард Хелм');
 insert into tbl_author (id, fio) values (5, 'Ральф Джонсон');
 insert into tbl_author (id, fio) values (6, 'Джон Влиссидес.');
 
-inset into book_author (book_id, author_id) values(1, 1);
-inset into book_author (book_id, author_id) values(2, 2);
-inset into book_author (book_id, author_id) values(3, 3);
-inset into book_author (book_id, author_id) values(3, 4);
-inset into book_author (book_id, author_id) values(3, 5);
-inset into book_author (book_id, author_id) values(3, 6);
+insert into book_author (book_id, author_id) values(1, 1);
+insert into book_author (book_id, author_id) values(2, 2);
+insert into book_author (book_id, author_id) values(3, 3);
+insert into book_author (book_id, author_id) values(3, 1);
+insert into book_author (book_id, author_id) values(3, 2);
+--insert into book_author (book_id, author_id) values(3, 6);
 
 
