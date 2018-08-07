@@ -1,5 +1,8 @@
 package ru.serdar1980.dao;
 
+import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import ru.serdar1980.domain.Book;
 
 import java.util.List;
@@ -8,9 +11,14 @@ public class BookRepositoryImpl implements BaseDao<Book> {
 
     private BookRepository repository;
 
+    @Autowired
+    public void setRepository(BookRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
-    public int save(Book book) {
+    @Transactional
+    public int saveDao(Book book) {
         repository.save(book);
         if (book.getId() != null) {
             return 1;
@@ -20,18 +28,27 @@ public class BookRepositoryImpl implements BaseDao<Book> {
     }
 
     @Override
-    public int delete(Book book) {
+    @Transactional
+    public int deleteDao(Book book) {
         repository.delete(book);
         return 1;
     }
 
     @Override
-    public Book findById(Long id) {
-        return repository.findById(id).get();
+    @Transactional
+    public Book findByIdDao(Long id) {
+        Book book = null;
+        try {
+            book = repository.findById(id).get();
+            Hibernate.initialize(book.getAuthors());
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+        }
+        return book;
     }
 
     @Override
-    public List<Book> findAll() {
+    public List<Book> findAllDao() {
         return repository.findAll();
     }
 }

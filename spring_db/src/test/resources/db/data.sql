@@ -16,6 +16,6 @@ insert into book_author (book_id, author_id) values(2, 2);
 insert into book_author (book_id, author_id) values(3, 3);
 insert into book_author (book_id, author_id) values(3, 1);
 insert into book_author (book_id, author_id) values(3, 2);
---insert into book_author (book_id, author_id) values(3, 6);
+
 
 

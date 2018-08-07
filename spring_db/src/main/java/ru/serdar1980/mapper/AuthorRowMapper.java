@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class AuthorRowMapper implements RowMapper {
-    Map<Long, Author> fromSelect = new HashMap<>();
+    private Map<Long, Author> fromSelect = new HashMap<>();
     @Override
     public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
         Author author;

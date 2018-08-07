@@ -19,15 +19,13 @@ import java.util.List;
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-public class AuthorJDBCDaoImplTest {
-
-    @Autowired
-    @Qualifier("authorJDBCDaoImpl")
-    private BaseDao<Author> dao;
+public class AuthorJPADaoImplTest {
 
     @MockBean
     Shell shell;
-
+    @Autowired
+    @Qualifier("authorJPADaoImpl")
+    private BaseDao<Author> dao;
 
     @Test
     public void iWantSaveShouldResponseAuthorWithId() {

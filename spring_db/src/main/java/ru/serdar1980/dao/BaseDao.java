@@ -3,12 +3,12 @@ package ru.serdar1980.dao;
 import java.util.List;
 
 public interface BaseDao<T> {
-    int save(T t);
+    int saveDao(T t);
 
-    int delete(T t);
+    int deleteDao(T t);
 
-    T findById(Long id);
+    T findByIdDao(Long id);
 
-    List<T> findAll();
+    List<T> findAllDao();
 
 }

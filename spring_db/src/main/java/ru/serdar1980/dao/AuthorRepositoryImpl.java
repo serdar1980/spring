@@ -1,7 +1,9 @@
 package ru.serdar1980.dao;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import ru.serdar1980.domain.Author;
 
 import java.util.List;
@@ -15,9 +17,9 @@ public class AuthorRepositoryImpl implements BaseDao<Author> {
         this.repository = repository;
     }
 
-
     @Override
-    public int save(Author author) {
+    @Transactional
+    public int saveDao(Author author) {
         repository.save(author);
         if (author.getId() != null) {
             return 1;
@@ -28,19 +30,29 @@ public class AuthorRepositoryImpl implements BaseDao<Author> {
     }
 
     @Override
-    public int delete(Author author) {
+    @Transactional
+    public int deleteDao(Author author) {
         repository.delete(author);
         return 1;
 
     }
 
     @Override
-    public Author findById(Long id) {
-        return repository.findById(id).get();
+    @Transactional
+    public Author findByIdDao(Long id) {
+        Author author = null;
+        try {
+            author = repository.findById(id).get();
+            Hibernate.initialize(author.getBooks());
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+        }
+        return author;
+
     }
 
     @Override
-    public List<Author> findAll() {
+    public List<Author> findAllDao() {
         return repository.findAll();
     }
 }

@@ -23,21 +23,21 @@ public class BookDDService extends DBService<Book> {
 
     @Override
     public void save(Book book) {
-        dao.save(book);
+        dao.saveDao(book);
     }
 
     @Override
     public void delete(Book book) {
-        dao.delete(book);
+        dao.deleteDao(book);
     }
 
     @Override
     public Book findById(Long id) {
-        return dao.findById(id);
+        return dao.findByIdDao(id);
     }
 
     @Override
     public List<Book> findAll() {
-        return dao.findAll();
+        return dao.findAllDao();
     }
 }

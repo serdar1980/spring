@@ -23,21 +23,21 @@ public class AuthorDBService extends DBService<Author> {
 
     @Override
     public void save(Author author) {
-        dao.save(author);
+        dao.saveDao(author);
     }
 
     @Override
     public void delete(Author author) {
-        dao.delete(author);
+        dao.deleteDao(author);
     }
 
     @Override
     public Author findById(Long id) {
-        return dao.findById(id);
+        return dao.findByIdDao(id);
     }
 
     @Override
     public List<Author> findAll() {
-        return dao.findAll();
+        return dao.findAllDao();
     }
 }

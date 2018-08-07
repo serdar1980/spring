@@ -19,65 +19,69 @@ import java.util.List;
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-public class AuthorJDBCDaoImplTest {
-
-    @Autowired
-    @Qualifier("authorJDBCDaoImpl")
-    private BaseDao<Author> dao;
+public class BookJPADaoImplTest {
 
     @MockBean
     Shell shell;
-
+    @Autowired
+    @Qualifier("bookJPADaoImpl")
+    private BaseDao<Book> dao;
 
     @Test
-    public void iWantSaveShouldResponseAuthorWithId() {
+    public void iWantSaveShouldResponseBookWithId() {
 
         final String fio = "Александр Сергеевич Пушкин";
         final String bookName = "СКАЗКА О ЦАРЕ САЛТАНЕ, О СЫНЕ ЕГО СЛАВНОМ И МОГУЧЕМ БОГАТЫРЕ КНЯЗЕ ГВИДОНЕ САЛТАНОВИЧЕ И О ПРЕКРАСНОЙ ЦАРЕВНЕ ЛЕБЕДИ";
         Author author = new Author(fio);
         Book book = new Book(bookName);
         List<Book> books = author.getBooks();
+        List<Author> authors = book.getAuthors();
         books.add(book);
-
+        authors.add(author);
         author.setBooks(books);
-        dao.saveDao(author);
-        Author authorFromDb = dao.findByIdDao(author.getId());
-        Assert.assertTrue(fio.equals(authorFromDb.getFio()));
-        Assert.assertTrue(authorFromDb.getBooks().size() == 1);
-        Assert.assertTrue(bookName.equals(authorFromDb.getBooks().get(0).getName()));
-        dao.deleteDao(author);
+        book.setAuthors(authors);
+        dao.saveDao(book);
+        Book fromDb = dao.findByIdDao(book.getId());
+        Assert.assertTrue(bookName.equals(fromDb.getName()));
+        Assert.assertTrue(fromDb.getAuthors().size() == 1);
+        Assert.assertTrue(fio.equals(fromDb.getAuthors().get(0).getFio()));
+        dao.deleteDao(book);
     }
 
     @Test
-    public void iWantDeleteShouldResponseAuthorWasDeleted() {
+    public void iWantDeleteShouldResponseBookWasDeleted() {
         final String fio = "Александр Сергеевич Пушкин";
         final String bookName = "СКАЗКА О ЦАРЕ САЛТАНЕ, О СЫНЕ ЕГО СЛАВНОМ И МОГУЧЕМ БОГАТЫРЕ КНЯЗЕ ГВИДОНЕ САЛТАНОВИЧЕ И О ПРЕКРАСНОЙ ЦАРЕВНЕ ЛЕБЕДИ";
         Author author = new Author(fio);
         Book book = new Book(bookName);
         List<Book> books = author.getBooks();
+        List<Author> authors = book.getAuthors();
         books.add(book);
+        authors.add(author);
+        author.setBooks(books);
+        book.setAuthors(authors);
 
         author.setBooks(books);
-        dao.saveDao(author);
-        Author authorFromDb = dao.findByIdDao(author.getId());
-        Assert.assertTrue(fio.equals(authorFromDb.getFio()));
-        dao.deleteDao(author);
-        authorFromDb = dao.findByIdDao(author.getId());
-        Assert.assertTrue(authorFromDb == null);
+        dao.saveDao(book);
+        Book fromDb = dao.findByIdDao(book.getId());
+        Assert.assertTrue(bookName.equals(fromDb.getName()));
+        dao.deleteDao(book);
+        fromDb = dao.findByIdDao(book.getId());
+        Assert.assertTrue(fromDb == null);
     }
 
 
     @Test
-    public void iSendIdShouldResponseAuthor() {
-        final String fio = "Эрих Гамма";
-        Author author = dao.findByIdDao(3L);
-        Assert.assertTrue(fio.equals(author.getFio()));
+    public void iSendIdShouldResponseBook() {
+        final String bookName = "Совершенный код";
+        Book book = dao.findByIdDao(2L);
+        Assert.assertTrue(bookName.equals(book.getName()));
     }
 
     @Test
-    public void iWantGetAllShouldResponseAllAuthor() {
-        int countDef = 6;
-        List<Author> authors = dao.findAllDao();
-        Assert.assertTrue(countDef == authors.size());
+    public void iWantGetAllShouldResponseAllBook() {
+        int countDef = 3;
+        List<Book> book = dao.findAllDao();
+        Assert.assertTrue(countDef == book.size());
     }
 }

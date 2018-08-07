@@ -74,6 +74,14 @@ public class DBShellCommand {
         return "Author was added";
     }
 
+    @ShellMethod("Удаление втора на id ")
+    public String deleteBook(@ShellOption Long authorId) {
+        Author author = bookDDService.findById(authorId);
+        if (author != null) {
+            authorDBService.delete(author);
+        }
+    }
+
     @ShellMethod("Добавить книгу ")
     public String addBook(
             @ShellOption String name, @ShellOption String[] authorFios
@@ -87,5 +95,13 @@ public class DBShellCommand {
         book.setAuthors(authors);
         bookDDService.save(book);
         return "Author was added";
+    }
+
+    @ShellMethod("Удаление книги на id книгу ")
+    public String deleteBook(@ShellOption Long bookId) {
+        Book book = bookDDService.findById(bookId);
+        if (book != null) {
+            bookDDService.delete(book);
+        }
     }
 }

@@ -23,12 +23,12 @@ import java.util.Map;
 @Component
 public class AuthorJDBCDaoImpl implements IAuthorDao {
 
-    private static final String SELECT_BY_ID_AUTHOR = "select a.id author_id, a.fio author_fio,  b.id book_id, b.name  book_name from tbl_author a left join book_author ba on a.id = ba.author_id left join tbl_book b  on ba.book_id = b.id where a.id = :id  ";
+    private static final String SELECT_BY_ID_AUTHOR = "select a.id author_id, a.fio author_fio,  b.id book_id, b.name  book_name from tbl_author a left join book_author ba on a.id = ba.author_id left join tbl_book b  on ba.book_id = b.id where a.id = :id";
     private static final String SELECT_ALL_AUTHOR = "select a.id author_id, a.fio author_fio,  b.id book_id, b.name book_name from tbl_author a left join book_author ba on a.id = ba.author_id left join tbl_book b  on ba.book_id = b.id";
     private static final String INSERT_AUTHOR = "insert into tbl_author (fio) values (:fio)";
-    private static final String DELETE_AUTHOR = "delete from tbl_author where id =:id";
+    private static final String DELETE_AUTHOR = "deleteDao from tbl_author where id =:id";
     private static final String UPDATE_AUTHOR = "update tbl_author set fio = :fio";
-    private static final String DELETE_LINK = "delete from book_author where author_id = :id ";
+    private static final String DELETE_LINK = "deleteDao from book_author where author_id = :id ";
     private static final String INSERT_LINK = "insert into book_author (book_id, author_id) values(:book, :author);";
 
 
@@ -80,7 +80,7 @@ public class AuthorJDBCDaoImpl implements IAuthorDao {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public int save(Author author) {
+    public int saveDao(Author author) {
         int res = 0;
         if (author.getId() == null) {
             MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -88,10 +88,12 @@ public class AuthorJDBCDaoImpl implements IAuthorDao {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             res = template.update(INSERT_AUTHOR, parameters, keyHolder, new String[]{"ID"});
             author.setId(keyHolder.getKey().longValue());
+
             author.getBooks().stream().forEach(book -> {
-                bookDao.save(book);
-                Author fromDB = findById(author.getId());
-                self.insertLink(book, author);
+                if (book.getId() == null) {
+                    bookDao.saveDao(book);
+                    self.insertLink(book, author);
+                }
             });
         }
         return res;
@@ -102,11 +104,17 @@ public class AuthorJDBCDaoImpl implements IAuthorDao {
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("book", book.getId());
         parameters.put("author", author.getId());
+        String[] test = {INSERT_LINK};
+        parameters.entrySet().stream().forEach(entry -> {
+            test[0] = test[0].replace(":" + entry.getKey(), entry.getValue().toString());
+        });
+        System.out.println(test[0]);
+
         template.update(INSERT_LINK, parameters);
     }
 
     @Override
-    public int delete(Author author) {
+    public int deleteDao(Author author) {
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("id", author.getId());
         template.update(DELETE_LINK, parameters);
@@ -118,7 +126,7 @@ public class AuthorJDBCDaoImpl implements IAuthorDao {
     }
 
     @Override
-    public Author findById(Long id) {
+    public Author findByIdDao(Long id) {
 
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("id", id);
@@ -126,14 +134,14 @@ public class AuthorJDBCDaoImpl implements IAuthorDao {
         template.query(SELECT_BY_ID_AUTHOR, parameters, mapper);
         List<Author> authors = mapper.getFromSelect();
         if (authors.size() != 1) {
-            //TODO THROW DUBLICATE EXCEPTION
+            return null;
         }
         return authors.get(0);
 
     }
 
     @Override
-    public List<Author> findAll() {
+    public List<Author> findAllDao() {
         AuthorRowMapper mapper = new AuthorRowMapper();
         template.query(SELECT_ALL_AUTHOR, mapper);
         return mapper.getFromSelect();

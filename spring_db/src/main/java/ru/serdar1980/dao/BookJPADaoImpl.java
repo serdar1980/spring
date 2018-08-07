@@ -16,7 +16,7 @@ public class BookJPADaoImpl implements IBookDao {
 
     @Override
     @Transactional
-    public int save(Book book) {
+    public int saveDao(Book book) {
         if (book.getId() == null) {
             em.persist(book);
         } else {
@@ -26,20 +26,28 @@ public class BookJPADaoImpl implements IBookDao {
     }
 
     @Override
-    public int delete(Book book) {
-        em.clear();
+    @Transactional
+    public int deleteDao(Book book) {
+        em.remove(em.contains(book) ? book : em.merge(book));
         return 1;
     }
 
     @Override
-    public Book findById(Long id) {
-        TypedQuery<Book> query =
-                em.createQuery("SELECT b FROM Book b where b.id=:id", Book.class);
-        return query.getSingleResult();
+    public Book findByIdDao(Long id) {
+        Book book = null;
+        try {
+            TypedQuery<Book> query =
+                    em.createQuery("SELECT b FROM Book b join fetch b.authors where b.id=:id", Book.class)
+                            .setParameter("id", id);
+            book = query.getSingleResult();
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+        }
+        return book;
     }
 
     @Override
-    public List<Book> findAll() {
+    public List<Book> findAllDao() {
         TypedQuery<Book> query = em.createQuery(
                 "SELECT b FROM Book b", Book.class);
         return query.getResultList();

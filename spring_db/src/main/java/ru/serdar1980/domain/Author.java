@@ -13,8 +13,8 @@ public class Author {
             CascadeType.MERGE
     })
     @JoinTable(name = "book_author",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "author_id")
+            joinColumns = @JoinColumn(name = "author_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id")
     )
     List<Book> books = new ArrayList<>();
     @Id
