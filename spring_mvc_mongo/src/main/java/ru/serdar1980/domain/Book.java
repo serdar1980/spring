@@ -1,17 +1,17 @@
 package ru.serdar1980.domain;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "tbl_book")
+@Document(collection = "book")
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private String name;
-    @ManyToMany(mappedBy = "books", cascade = CascadeType.ALL)
     private List<Author> authors = new ArrayList<>();
 
     public Book() {
@@ -21,11 +21,11 @@ public class Book {
         this.name = name;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

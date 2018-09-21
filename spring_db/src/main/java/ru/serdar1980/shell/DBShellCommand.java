@@ -75,11 +75,12 @@ public class DBShellCommand {
     }
 
     @ShellMethod("Удаление втора на id ")
-    public String deleteBook(@ShellOption Long authorId) {
-        Author author = bookDDService.findById(authorId);
+    public String authorBook(@ShellOption Long authorId) {
+        Author author = authorDBService.findById(authorId);
         if (author != null) {
             authorDBService.delete(author);
         }
+        return "Удалено";
     }
 
     @ShellMethod("Добавить книгу ")
@@ -103,5 +104,6 @@ public class DBShellCommand {
         if (book != null) {
             bookDDService.delete(book);
         }
+        return "Удалено";
     }
 }
