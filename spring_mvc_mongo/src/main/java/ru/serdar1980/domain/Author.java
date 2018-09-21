@@ -1,25 +1,17 @@
 package ru.serdar1980.domain;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "tbl_author")
+@Document(collection = "author")
 public class Author {
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    @JoinTable(name = "book_author",
-            joinColumns = @JoinColumn(name = "author_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id")
-    )
     List<Book> books = new ArrayList<>();
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private String fio;
 
     public Author() {
@@ -29,28 +21,31 @@ public class Author {
         this.fio = fio;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public Author setId(String id) {
         this.id = id;
+        return this;
     }
 
     public String getFio() {
         return fio;
     }
 
-    public void setFio(String fio) {
+    public Author setFio(String fio) {
         this.fio = fio;
+        return this;
     }
 
     public List<Book> getBooks() {
         return books;
     }
 
-    public void setBooks(List<Book> books) {
+    public Author setBooks(List<Book> books) {
         this.books = books;
+        return this;
     }
 
     @Override
@@ -71,5 +66,9 @@ public class Author {
         result = 31 * result + (id != null ? id.hashCode() : 0);
         result = 31 * result + (fio != null ? fio.hashCode() : 0);
         return result;
+    }
+
+    public static Author of() {
+        return new Author();
     }
 }
