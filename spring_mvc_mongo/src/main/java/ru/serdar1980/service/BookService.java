@@ -1,5 +1,7 @@
 package ru.serdar1980.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.serdar1980.domain.Book;
@@ -9,6 +11,7 @@ import java.util.List;
 
 @Service
 public class BookService {
+    private final static Logger logger = LoggerFactory.getLogger(BookService.class);
     BookRepository repository;
 
     @Autowired
@@ -33,6 +36,11 @@ public class BookService {
         repository.save(book);
     }
     public void delete(Book book){
-        repository.delete(book);
+
+        try {
+            repository.delete(book);
+        } catch (IllegalArgumentException ex) {
+            logger.warn("Try to delete element which not found in DB");
+        }
     }
 }

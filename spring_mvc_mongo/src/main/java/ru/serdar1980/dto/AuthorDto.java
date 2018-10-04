@@ -1,8 +1,17 @@
 package ru.serdar1980.dto;
 
-public class authorDto {
+public class AuthorDto {
+    String id;
     String fio;
     String books;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getFio() {
         return fio;

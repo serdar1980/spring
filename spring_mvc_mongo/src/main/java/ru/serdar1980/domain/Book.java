@@ -3,7 +3,6 @@ package ru.serdar1980.domain;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,16 +24,17 @@ public class Book {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public static Book of() {
+        return new Book();
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Book setId(String id) {
+        this.id = id;
+        return this;
     }
 
 
@@ -42,8 +42,9 @@ public class Book {
         return authors;
     }
 
-    public void setAuthors(List<Author> authors) {
-        this.authors = authors;
+    public Book setName(String name) {
+        this.name = name;
+        return this;
     }
 
     @Override
@@ -64,5 +65,10 @@ public class Book {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (authors != null ? authors.hashCode() : 0);
         return result;
+    }
+
+    public Book setAuthors(List<Author> authors) {
+        this.authors = new ArrayList<>(authors);
+        return this;
     }
 }
