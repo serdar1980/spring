@@ -44,7 +44,7 @@ public class Author {
     }
 
     public Author setBooks(List<Book> books) {
-        this.books = books;
+        this.books = new ArrayList<>(books);
         return this;
     }
 

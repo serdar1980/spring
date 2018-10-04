@@ -29,22 +29,23 @@
     </div>
     <th:block th:each="author : ${authors}">
         <div class="row">
-            <div class="col-4" th:text="${author.getFio()}"></div>
-            <div class="col-6">
+            <div class="col-1" th:text="${author.getId()}"></div>
+            <div class="col-3" th:text="${author.getFio()}"></div>
+            <div class="col-5">
                 <th:block th:each="book : ${author.getBooks()}">
                     <span th:text="${book} ? ${book.getName()} : ''"></span>
                 </th:block>
                 <br/>
             </div>
-            <div class="col-1">
-                <a href="/author/edit/th:text='${author.getId()}'">
+            <div class="col-2">
+                <a th:href="@{'/author/edit/' + ${author.getId()}}">
                     <button type="button" class="btn btn-success">
                         Редактировать
                     </button>
 
             </div>
             <div class="col-1">
-                <a href="/author/delete/th:text='${author.getId()}'">
+                <a th:href="@{'/author/delete/' + ${author.getId()}}">
                     <button type="button" class="btn btn-danger">
                         Удалить
                     </button>
