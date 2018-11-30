@@ -1,0 +1,11 @@
+###
+#   Database Settings
+###
+spring:
+  data:
+    mongodb:
+      host: 127.0.0.1
+      port: 27017
+      database: app1
+server:
+    port: 8090

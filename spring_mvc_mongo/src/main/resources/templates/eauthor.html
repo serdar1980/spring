@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico"/>
+
+    <title>Navbar Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../static/css/bootstrap.css" rel="stylesheet"
+          th:href="@{/css/bootstrap.css}"/>
+</head>
+<body>
+<div class="container">
+    <form action="#" th:action="@{/author/save}" th:object="${author}"
+          method="post">
+        <input type="text" name="id" th:value="${author.getId()}"/>
+        <div class="row">
+            <div class="col-8">Автор:</div>
+            <div class="col-4">
+                <input type="text" name="name"
+                       th:value="${author.getFio()}"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8">Книги:</div>
+            <div class="col-4">
+                Введите книги каждая на новой строке
+                <textarea name="books">
+                     <th:block th:each="book : ${author.getBooks()}">
+                        <span th:text="${book.getName()}+ '\n'"></span>
+                    </th:block>
+                </textarea></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col"><input type="submit" value="Сохранить"></div>
+        </div>
+    </form>
+</div> <!-- /container -->
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="../static/js/bootstrap.js" th:href="@{/js/bootstrap.js}"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+</body>
+</html>
